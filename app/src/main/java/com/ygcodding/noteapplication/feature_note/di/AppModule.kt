@@ -7,6 +7,7 @@ import com.ygcodding.noteapplication.feature_note.data.repository.NoteRepository
 import com.ygcodding.noteapplication.feature_note.domain.repository.NoteRepository
 import com.ygcodding.noteapplication.feature_note.domain.use_case.AddNote
 import com.ygcodding.noteapplication.feature_note.domain.use_case.DeleteNote
+import com.ygcodding.noteapplication.feature_note.domain.use_case.GetNote
 import com.ygcodding.noteapplication.feature_note.domain.use_case.GetNotes
 import com.ygcodding.noteapplication.feature_note.domain.use_case.NotesUseCases
 import dagger.Module
@@ -40,7 +41,8 @@ object AppModule {
         return NotesUseCases(
             getNotes = GetNotes(repository),
             deleteNote = DeleteNote(repository),
-            addNote = AddNote(repository)
+            addNote = AddNote(repository),
+            getNote = GetNote(repository)
         )
     }
 }
