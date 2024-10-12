@@ -54,7 +54,7 @@ class AddEditNoteViewModel @Inject constructor(
                             isHintVisible = false
                         )
                         _noteContent.value = _noteContent.value.copy(
-                            text = note.title,
+                            text = note.content,
                             isHintVisible = false
                         )
                         _noteColor.value = note.color
@@ -102,8 +102,8 @@ class AddEditNoteViewModel @Inject constructor(
                         notesUseCases.addNote(
                             Note(
                                 id = currentNoteId,
-                                title = _noteTitle.value.toString(),
-                                content = _noteContent.value.toString(),
+                                title = _noteTitle.value.text,
+                                content = _noteContent.value.text,
                                 color = _noteColor.value,
                                 timestamp = System.currentTimeMillis(),
                             )

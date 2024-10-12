@@ -4,44 +4,55 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.Alignment
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.ygcodding.noteapplication.feature_note.presentation.add_edit_note.AddEditNoteScreen
+import com.ygcodding.noteapplication.feature_note.presentation.notes.NotesScreen
+import com.ygcodding.noteapplication.feature_note.presentation.util.AddEditNoteScreenRoute
+import com.ygcodding.noteapplication.feature_note.presentation.util.NotesScreen
 import com.ygcodding.noteapplication.ui.theme.NoteApplicationTheme
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.serialization.Serializable
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             NoteApplicationTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Surface(
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = NotesScreen
+                    ) {
+                        composable<NotesScreen> {
+                            NotesScreen(
+                                navController = navController
+                            )
+                        }
+                        composable<AddEditNoteScreenRoute> {
+                            val args = it.toRoute<AddEditNoteScreenRoute>()
+                            AddEditNoteScreen(
+                                noteId = args.noteId,
+                                noteColor = args.noteColor ?: -1,
+                                navController = navController
+                            )
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    NoteApplicationTheme {
-        Greeting("Android")
     }
 }

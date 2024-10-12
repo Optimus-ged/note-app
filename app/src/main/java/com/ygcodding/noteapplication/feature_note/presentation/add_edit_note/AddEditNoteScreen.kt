@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,6 +48,7 @@ import kotlinx.coroutines.launch
 fun AddEditNoteScreen(
     navController: NavController,
     noteColor: Int,
+    noteId: Int?,
     viewModel: AddEditNoteViewModel = hiltViewModel()
 ) {
     val titleState by viewModel.noteTitle.collectAsStateWithLifecycle()
@@ -78,10 +80,7 @@ fun AddEditNoteScreen(
             FloatingActionButton(
                 onClick = {
                     viewModel.onEvent(AddEditNoteEvent.SaveNote)
-                },
-                modifier = Modifier.background(
-                    color = MaterialTheme.colorScheme.primary
-                )
+                }
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Save note")
             }
@@ -96,7 +95,7 @@ fun AddEditNoteScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Note.noteColors.forEach { color ->
@@ -140,7 +139,8 @@ fun AddEditNoteScreen(
                 },
                 isHintVisible = titleState.isHintVisible,
                 singleLine = true,
-                textStyle = MaterialTheme.typography.bodyMedium
+                textStyle = MaterialTheme.typography.displaySmall,
+                modifier = Modifier.padding(horizontal = 20.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             TransparentHintTextField(
@@ -154,7 +154,7 @@ fun AddEditNoteScreen(
                 },
                 isHintVisible = contentState.isHintVisible,
                 textStyle = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.fillMaxHeight()
+                modifier = Modifier.fillMaxHeight().padding(horizontal = 20.dp)
             )
         }
     }

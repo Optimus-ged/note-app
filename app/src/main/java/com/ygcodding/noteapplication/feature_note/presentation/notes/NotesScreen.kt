@@ -38,15 +38,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.ygcodding.noteapplication.feature_note.presentation.notes.components.NoteItem
 import com.ygcodding.noteapplication.feature_note.presentation.notes.components.OrderSection
+import com.ygcodding.noteapplication.feature_note.presentation.util.AddEditNoteScreenRoute
 import kotlinx.coroutines.launch
 
 @Composable
 fun NotesScreen(
-    modifier: Modifier = Modifier,
-    viewModel: NotesViewModel = hiltViewModel()
-
+    navController: NavController,
+    viewModel: NotesViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -56,10 +57,14 @@ fun NotesScreen(
         snackbarHost = { SnackbarHost(snackBarHostState) },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {},
-                modifier = Modifier.background(
-                    color = MaterialTheme.colorScheme.primary
-                )
+                onClick = {
+                    navController.navigate(
+                        AddEditNoteScreenRoute(
+                            noteId = null,
+                            noteColor = null,
+                        )
+                    )
+                },
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add note")
             }
@@ -71,11 +76,15 @@ fun NotesScreen(
                 .padding(innerPadding)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(
+                    start = 20.dp,
+                    top = 10.dp,
+                    end = 8.dp,
+                ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text(text = "Your note", style = MaterialTheme.typography.bodyLarge)
+                Text(text = "Notes", style = MaterialTheme.typography.displaySmall)
                 IconButton(
                     onClick = {
                         viewModel.onEvent(NotesEvents.ToggleOrderSection)
@@ -90,7 +99,8 @@ fun NotesScreen(
             AnimatedVisibility(
                 visible = state.isOrderSectionVisible,
                 enter = fadeIn() + slideInVertically(),
-                exit = fadeOut() + slideOutVertically()
+                exit = fadeOut() + slideOutVertically(),
+                modifier = Modifier.padding(start = 5.dp)
             ) {
                 OrderSection(
                     modifier = Modifier
@@ -102,6 +112,7 @@ fun NotesScreen(
                     }
                 )
             }
+
             Spacer(modifier = Modifier.height(16.dp))
             LazyColumn {
                 items(state.notes) { note ->
@@ -109,7 +120,14 @@ fun NotesScreen(
                         note = note,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { },
+                            .clickable {
+                                navController.navigate(
+                                    AddEditNoteScreenRoute(
+                                        noteId = note.id,
+                                        noteColor = note.color,
+                                    )
+                                )
+                            },
                         onDeleteClick = {
                             viewModel.onEvent(NotesEvents.DeleteNote(note))
                             scope.launch {
@@ -123,7 +141,7 @@ fun NotesScreen(
                             }
                         },
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }

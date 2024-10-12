@@ -27,13 +27,13 @@ class NotesViewModel @Inject constructor(
     private var _getNotesJob : Job? = null
 
     init {
-        getNotes(NoteOrder.Date(OrderType.Descending))
+        getNotes(NoteOrder.Date(OrderType.Ascending))
     }
 
     private fun getNotes(noteOrder: NoteOrder){
         _getNotesJob?.cancel()
          _getNotesJob = viewModelScope.launch {
-            notesUseCases.getNotes().onEach { notes ->
+            notesUseCases.getNotes(noteOrder).onEach { notes ->
                 _state.value = _state.value.copy(
                     notes = notes,
                     noteOrder = noteOrder
@@ -45,9 +45,8 @@ class NotesViewModel @Inject constructor(
     fun onEvent(event: NotesEvents) {
         when (event) {
             is NotesEvents.OrderNotes -> {
-                if (
-                    _state.value.noteOrder::class == event.noteOrder::class &&
-                    _state.value.noteOrder.orderType == event.noteOrder.orderType
+                if (state.value.noteOrder::class == event.noteOrder::class &&
+                    state.value.noteOrder.orderType == event.noteOrder.orderType
                 ) {
                     return
                 }
