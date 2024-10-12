@@ -36,31 +36,6 @@ fun NoteItem(
     Box(
         modifier = modifier
     ) {
-//        Canvas(modifier = Modifier.matchParentSize()) {
-//            val clipPath = Path().apply {
-//                lineTo(size.width - cutCornerSize.toPx(), 0f)
-//                lineTo(size.width, cutCornerSize.toPx())
-//                lineTo(size.width, size.height)
-//                lineTo(0f, size.height)
-//                close()
-//            }
-//
-//            clipPath(clipPath) {
-//                drawRoundRect(
-//                    color = Color(note.color),
-//                    size = size,
-//                    cornerRadius = CornerRadius(cornerRadius.toPx())
-//                )
-//                drawRoundRect(
-//                    color = Color(
-//                        ColorUtils.blendARGB(note.color, 0x000000, 0.2f)
-//                    ),
-//                    topLeft = Offset(size.width - cutCornerSize.toPx(), -100f),
-//                    size = Size(cutCornerSize.toPx() + 100f, cutCornerSize.toPx() + 100f),
-//                    cornerRadius = CornerRadius(cornerRadius.toPx())
-//                )
-//            }
-//        }
         Box(
             modifier = modifier
                 .fillMaxWidth()
@@ -77,7 +52,7 @@ fun NoteItem(
             ) {
                 Text(
                     text = note.title,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
